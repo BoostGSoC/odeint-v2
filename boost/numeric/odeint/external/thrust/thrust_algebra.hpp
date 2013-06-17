@@ -24,6 +24,7 @@
 #include <thrust/iterator/zip_iterator.h>
 
 #include <boost/range.hpp>
+#include <boost/numeric/odeint/util/n_ary_helper.hpp>
 
 namespace boost {
 namespace numeric {
@@ -50,8 +51,6 @@ namespace detail {
 
 
 
-/** ToDO extend until for_each14 for rk78 */
-
 /*
  * The const versions are needed for boost.range to work, i.e.
  * it allows you to do
@@ -60,140 +59,22 @@ namespace detail {
 
 struct thrust_algebra
 {
-    template< class StateType , class Operation >
-    static void for_each1( StateType &s , Operation op )
-    {
-        thrust::for_each( boost::begin(s) , boost::end(s) , op );
-    }
 
-    template< class StateType1 , class StateType2 , class Operation >
-    static void for_each2( StateType1 &s1 , StateType2 &s2 , Operation op )
-    {
-        thrust::for_each(
-                thrust::make_zip_iterator( thrust::make_tuple( boost::begin(s1) ,
-                        boost::begin(s2) ) ) ,
-                        thrust::make_zip_iterator( thrust::make_tuple( boost::end(s1) ,
-                                boost::end(s2) ) ) ,
-                                op);
-    }
-
-    template< class StateType1 , class StateType2 , class StateType3 , class Operation >
-    static void for_each3( StateType1 &s1 , StateType2 &s2 , StateType3 &s3 , Operation op )
-    {
-        thrust::for_each(
-                thrust::make_zip_iterator( thrust::make_tuple( boost::begin(s1) ,
-                        boost::begin(s2) ,
-                        boost::begin(s3) ) ) ,
-                        thrust::make_zip_iterator( thrust::make_tuple( boost::end(s1) ,
-                                boost::end(s2) ,
-                                boost::end(s3) ) ) ,
-                                op);
-    }
-
-    template< class StateType1 , class StateType2 , class StateType3 , class StateType4 ,
-    class Operation >
-    static void for_each4( StateType1 &s1 , StateType2 &s2 , StateType3 &s3 , StateType4 &s4 ,
-            Operation op )
-    {
-        thrust::for_each(
-                thrust::make_zip_iterator( thrust::make_tuple( boost::begin(s1) ,
-                        boost::begin(s2) ,
-                        boost::begin(s3) ,
-                        boost::begin(s4) ) ) ,
-                        thrust::make_zip_iterator( thrust::make_tuple( boost::end(s1) ,
-                                boost::end(s2) ,
-                                boost::end(s3) ,
-                                boost::end(s4) ) ) ,
-                                op);
-    }
-
-    template< class StateType1 , class StateType2 , class StateType3 ,
-    class StateType4 , class StateType5 ,class Operation >
-    static void for_each5( StateType1 &s1 , StateType2 &s2 , StateType3 &s3 , StateType4 &s4 ,
-            StateType5 &s5 , Operation op )
-    {
-        thrust::for_each(
-                thrust::make_zip_iterator( thrust::make_tuple( boost::begin(s1) ,
-                        boost::begin(s2) ,
-                        boost::begin(s3) ,
-                        boost::begin(s4) ,
-                        boost::begin(s5) ) ) ,
-                        thrust::make_zip_iterator( thrust::make_tuple( boost::end(s1) ,
-                                boost::end(s2) ,
-                                boost::end(s3) ,
-                                boost::end(s4) ,
-                                boost::end(s5) ) ) ,
-                                op);
-    }
-
-    template< class StateType1 , class StateType2 , class StateType3 ,
-    class StateType4 , class StateType5 , class StateType6 , class Operation >
-    static void for_each6( StateType1 &s1 , StateType2 &s2 , StateType3 &s3 , StateType4 &s4 ,
-            StateType5 &s5 , StateType6 &s6 , Operation op )
-    {
-        thrust::for_each(
-                thrust::make_zip_iterator( thrust::make_tuple( boost::begin(s1) ,
-                        boost::begin(s2) ,
-                        boost::begin(s3) ,
-                        boost::begin(s4) ,
-                        boost::begin(s5) ,
-                        boost::begin(s6) ) ) ,
-                        thrust::make_zip_iterator( thrust::make_tuple( boost::end(s1) ,
-                                boost::end(s2) ,
-                                boost::end(s3) ,
-                                boost::end(s4) ,
-                                boost::end(s5) ,
-                                boost::end(s6) ) ) ,
-                                op);
-    }
-
-    template< class StateType1 , class StateType2 , class StateType3 , class StateType4 ,
-    class StateType5 , class StateType6 , class StateType7 , class Operation >
-    static void for_each7( StateType1 &s1 , StateType2 &s2 , StateType3 &s3 , StateType4 &s4 ,
-            StateType5 &s5 , StateType6 &s6 , StateType7 &s7 , Operation op )
-    {
-        thrust::for_each(
-                thrust::make_zip_iterator( thrust::make_tuple( boost::begin(s1) ,
-                        boost::begin(s2) ,
-                        boost::begin(s3) ,
-                        boost::begin(s4) ,
-                        boost::begin(s5) ,
-                        boost::begin(s6) ,
-                        boost::begin(s7) ) ) ,
-                        thrust::make_zip_iterator( thrust::make_tuple( boost::end(s1) ,
-                                boost::end(s2) ,
-                                boost::end(s3) ,
-                                boost::end(s4) ,
-                                boost::end(s5) ,
-                                boost::end(s6) ,
-                                boost::end(s7) ) ) ,
-                                op);
-    }
-
-    template< class StateType1 , class StateType2 , class StateType3 , class StateType4 ,
-    class StateType5 , class StateType6 , class StateType7 , class StateType8 , class Operation >
-    static void for_each8( StateType1 &s1 , StateType2 &s2 , StateType3 &s3 , StateType4 &s4 ,
-            StateType5 &s5 , StateType6 &s6 , StateType7 &s7 , StateType8 &s8 , Operation op )
-    {
-        thrust::for_each(
-                thrust::make_zip_iterator( thrust::make_tuple( boost::begin(s1) ,
-                        boost::begin(s2) ,
-                        boost::begin(s3) ,
-                        boost::begin(s4) ,
-                        boost::begin(s5) ,
-                        boost::begin(s6) ,
-                        boost::begin(s7) ,
-                        boost::begin(s8) ) ) ,
-                thrust::make_zip_iterator( thrust::make_tuple( boost::end(s1) ,
-                        boost::end(s2) ,
-                        boost::end(s3) ,
-                        boost::end(s4) ,
-                        boost::end(s5) ,
-                        boost::end(s6) ,
-                        boost::end(s7) ,
-                        boost::end(s8) ) ) ,
-                op);
-    }
+#define BOOST_ODEINT_GEN_BODY(n) \
+    BOOST_PP_IF(BOOST_PP_DEC(n) \
+    , /* n > 1 */ \
+        thrust::for_each( \
+            thrust::make_zip_iterator( thrust::make_tuple( \
+                BOOST_ODEINT_ENUM_UNARY_CALLS(n, boost::begin BOOST_PP_INTERCEPT, s) \
+            ) ) , \
+            thrust::make_zip_iterator( thrust::make_tuple( \
+                BOOST_ODEINT_ENUM_UNARY_CALLS(n, boost::end BOOST_PP_INTERCEPT, s) \
+            ) ) , op ); \
+    , /* n = 1 */ \
+        thrust::for_each( boost::begin(s0) , boost::end(s0) , op ); \
+    )
+BOOST_ODEINT_GEN_FOR_EACH(BOOST_ODEINT_GEN_BODY)
+#undef BOOST_ODEINT_GEN_BODY
 
     template< class S >
     static typename S::value_type norm_inf( const S &s )
