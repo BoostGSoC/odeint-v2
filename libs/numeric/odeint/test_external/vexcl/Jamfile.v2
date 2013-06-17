@@ -5,16 +5,18 @@
 # bring in rules for testing
 
 
+import os ;
 import testing ;
 
 use-project boost : $(BOOST_ROOT) ;
-VEXCL_INCLUDE = /home/mario/vexcl ;
-#OPENCL_INCLUDE = /usr/local/cuda/include ;
-OPENCL_INCLUDE = /usr/include ;
+
+local VEXCL_INCLUDE = [ os.environ VEXCL_INCLUDE ] ;
+local OPENCL_INCLUDE = [ os.environ OPENCL_INCLUDE ] ;
 
 project
     : requirements
       <library>/boost/test//boost_unit_test_framework
+      <library>/boost/chrono//boost_chrono
       <define>BOOST_ALL_NO_LIB=1
       <include>../../../../..
       <include>$(VEXCL_INCLUDE)

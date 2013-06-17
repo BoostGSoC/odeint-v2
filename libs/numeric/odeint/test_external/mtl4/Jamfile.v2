@@ -3,13 +3,11 @@
 # accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+import os ;
 import testing ;
-import boost ;
+use-project boost : $(BOOST_ROOT) ;
 
-boost.use-project ;
-
-# set your MTL4 directory here
-MTL4_INCLUDE = /home/mario/MTL4 ;
+local MTL4_INCLUDE = [ os.environ MTL4_INCLUDE ] ;
 
 project
     : requirements 
@@ -25,6 +23,5 @@ project
 test-suite "odeint-mtl4"
     :
     [ run mtl4_resize.cpp ]
-    [ run lorenz.cpp ]
     : <testing.launcher>valgrind
     ;
