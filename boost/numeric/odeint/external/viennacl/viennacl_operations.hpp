@@ -22,6 +22,7 @@
 
 #ifdef VIENNACL_WITH_OPENCL
 #  include <viennacl/generator/custom_operation.hpp>
+#  include <boost/numeric/odeint/util/n_ary_helper.hpp>
 #endif
 
 namespace boost {
@@ -33,183 +34,36 @@ namespace odeint {
 struct viennacl_operations
 {
 
-    template< class Fac1 = double , class Fac2 = Fac1 >
-    struct scale_sum2
-    {
-        const Fac1 m_alpha1;
-        const Fac2 m_alpha2;
-
-        scale_sum2( Fac1 alpha1 , Fac2 alpha2 )
-            : m_alpha1( alpha1 ) , m_alpha2( alpha2 )
-        { }
-
-        template< class T1 , class T2 , class T3 >
-        void operator()( viennacl::vector<T1> &v1 ,
-                const viennacl::vector<T2> &v2 ,
-                const viennacl::vector<T3> &v3
-                ) const
-        {
-            using namespace viennacl;
-
-            static generator::symbolic_vector    <0, T1>   sym_v1;
-            static generator::symbolic_vector    <1, T2>   sym_v2;
-            static generator::symbolic_vector    <2, T3>   sym_v3;
-            static generator::cpu_symbolic_scalar<3, Fac1> sym_a1;
-            static generator::cpu_symbolic_scalar<4, Fac2> sym_a2;
-
-            static generator::custom_operation op(
-                    sym_v1 = sym_a1 * sym_v2
-                           + sym_a2 * sym_v3,
-                    "scale_sum2"
-                    );
-
-            ocl::enqueue( op(v1, v2, v3, m_alpha1, m_alpha2) );
-        }
-
-        typedef void result_type;
-    };
-
-
-    template< class Fac1 = double , class Fac2 = Fac1 , class Fac3 = Fac2 >
-    struct scale_sum3
-    {
-        const Fac1 m_alpha1;
-        const Fac2 m_alpha2;
-        const Fac3 m_alpha3;
-
-        scale_sum3( Fac1 alpha1 , Fac2 alpha2 , Fac3 alpha3 )
-            : m_alpha1( alpha1 ) , m_alpha2( alpha2 ) , m_alpha3( alpha3 )
-        { }
-
-        template< class T1 , class T2 , class T3 , class T4 >
-        void operator()( viennacl::vector<T1> &v1 ,
-                const viennacl::vector<T2> &v2 ,
-                const viennacl::vector<T3> &v3 ,
-                const viennacl::vector<T4> &v4
-                ) const
-        {
-            using namespace viennacl;
-
-            static generator::symbolic_vector    <0, T1>   sym_v1;
-            static generator::symbolic_vector    <1, T2>   sym_v2;
-            static generator::symbolic_vector    <2, T3>   sym_v3;
-            static generator::symbolic_vector    <3, T4>   sym_v4;
-            static generator::cpu_symbolic_scalar<4, Fac1> sym_a1;
-            static generator::cpu_symbolic_scalar<5, Fac2> sym_a2;
-            static generator::cpu_symbolic_scalar<6, Fac3> sym_a3;
-
-            static generator::custom_operation op(
-                    sym_v1 = sym_a1 * sym_v2
-                           + sym_a2 * sym_v3
-                           + sym_a3 * sym_v4,
-                    "scale_sum3"
-                    );
-
-            ocl::enqueue( op(v1, v2, v3, v4, m_alpha1, m_alpha2, m_alpha3) );
-        }
-
-        typedef void result_type;
-    };
-
-
-    template< class Fac1 = double , class Fac2 = Fac1 , class Fac3 = Fac2 , class Fac4 = Fac3 >
-    struct scale_sum4
-    {
-        const Fac1 m_alpha1;
-        const Fac2 m_alpha2;
-        const Fac3 m_alpha3;
-        const Fac4 m_alpha4;
-
-        scale_sum4( Fac1 alpha1 , Fac2 alpha2 , Fac3 alpha3 , Fac4 alpha4 )
-        : m_alpha1( alpha1 ) , m_alpha2( alpha2 ) , m_alpha3( alpha3 ) , m_alpha4( alpha4 ) { }
-
-        template< class T1 , class T2 , class T3 , class T4 , class T5 >
-        void operator()( viennacl::vector<T1> &v1 ,
-                const viennacl::vector<T2> &v2 ,
-                const viennacl::vector<T3> &v3 ,
-                const viennacl::vector<T4> &v4 ,
-                const viennacl::vector<T5> &v5
-                ) const
-        {
-            using namespace viennacl;
-
-            static generator::symbolic_vector    <0, T1>   sym_v1;
-            static generator::symbolic_vector    <1, T2>   sym_v2;
-            static generator::symbolic_vector    <2, T3>   sym_v3;
-            static generator::symbolic_vector    <3, T4>   sym_v4;
-            static generator::symbolic_vector    <4, T5>   sym_v5;
-            static generator::cpu_symbolic_scalar<5, Fac1> sym_a1;
-            static generator::cpu_symbolic_scalar<6, Fac2> sym_a2;
-            static generator::cpu_symbolic_scalar<7, Fac3> sym_a3;
-            static generator::cpu_symbolic_scalar<8, Fac4> sym_a4;
-
-            static generator::custom_operation op(
-                    sym_v1 = sym_a1 * sym_v2
-                           + sym_a2 * sym_v3
-                           + sym_a3 * sym_v4
-                           + sym_a4 * sym_v5,
-                    "scale_sum4"
-                    );
-
-            ocl::enqueue( op(v1, v2, v3, v4, v5,
-                        m_alpha1, m_alpha2, m_alpha3, m_alpha4) );
-        }
-
-        typedef void result_type;
-    };
-
-
-    template< class Fac1 = double , class Fac2 = Fac1 , class Fac3 = Fac2 , class Fac4 = Fac3 , class Fac5 = Fac4 >
-    struct scale_sum5
-    {
-        const Fac1 m_alpha1;
-        const Fac2 m_alpha2;
-        const Fac3 m_alpha3;
-        const Fac4 m_alpha4;
-        const Fac5 m_alpha5;
-
-        scale_sum5( Fac1 alpha1 , Fac2 alpha2 , Fac3 alpha3 , Fac4 alpha4 , Fac5 alpha5 )
-        : m_alpha1( alpha1 ) , m_alpha2( alpha2 ) , m_alpha3( alpha3 ) , m_alpha4( alpha4 ) , m_alpha5( alpha5 ) { }
-
-        template< class T1 , class T2 , class T3 , class T4 , class T5 , class T6 >
-        void operator()( viennacl::vector<T1> &v1 ,
-                const viennacl::vector<T2> &v2 ,
-                const viennacl::vector<T3> &v3 ,
-                const viennacl::vector<T4> &v4 ,
-                const viennacl::vector<T5> &v5 ,
-                const viennacl::vector<T6> &v6
-                ) const
-        {
-            using namespace viennacl;
-
-            static generator::symbolic_vector    < 0, T1>   sym_v1;
-            static generator::symbolic_vector    < 1, T2>   sym_v2;
-            static generator::symbolic_vector    < 2, T3>   sym_v3;
-            static generator::symbolic_vector    < 3, T4>   sym_v4;
-            static generator::symbolic_vector    < 4, T5>   sym_v5;
-            static generator::symbolic_vector    < 5, T6>   sym_v6;
-            static generator::cpu_symbolic_scalar< 6, Fac1> sym_a1;
-            static generator::cpu_symbolic_scalar< 7, Fac2> sym_a2;
-            static generator::cpu_symbolic_scalar< 8, Fac3> sym_a3;
-            static generator::cpu_symbolic_scalar< 9, Fac4> sym_a4;
-            static generator::cpu_symbolic_scalar<10, Fac5> sym_a5;
-
-            static generator::custom_operation op(
-                    sym_v1 = sym_a1 * sym_v2
-                           + sym_a2 * sym_v3
-                           + sym_a3 * sym_v4
-                           + sym_a4 * sym_v5
-                           + sym_a5 * sym_v6,
-                    "scale_sum5"
-                    );
-
-            ocl::enqueue( op(v1, v2, v3, v4, v5, v6,
-                        m_alpha1, m_alpha2, m_alpha3, m_alpha4, m_alpha5) );
-        }
-
-        typedef void result_type;
-    };
-
+#define BOOST_ODEINT_GEN_BODY(n, unused) \
+    template< BOOST_PP_ENUM_PARAMS(BOOST_PP_INC(n), class T) > \
+    void operator()( viennacl::vector<T0> &v0 \
+        BOOST_ODEINT_ENUM_TRAILING_SHIFTED_BINARY_PARAMS(BOOST_PP_INC(n), \
+            const viennacl::vector<T, > &v) \
+    ) const { \
+        using namespace viennacl; \
+        BOOST_PP_REPEAT(BOOST_PP_INC(n), BOOST_ODEINT_GEN_BODY_1, ~) \
+        BOOST_PP_REPEAT(n, BOOST_ODEINT_GEN_BODY_2, BOOST_PP_INC(n)) \
+        static generator::custom_operation op( \
+            sym_v0 = BOOST_PP_REPEAT(n, BOOST_ODEINT_GEN_BODY_3, ~) , \
+            "scale_sum" #n \
+        ); \
+        ocl::enqueue( op( \
+            BOOST_PP_ENUM_PARAMS(BOOST_PP_INC(n), v) , \
+            BOOST_PP_ENUM_PARAMS(n, m_alpha) \
+        ) ); \
+    }
+#define BOOST_ODEINT_GEN_BODY_1(z, n, unused) \
+    static generator::symbolic_vector< n , T##n > sym_v##n ;
+#define BOOST_ODEINT_GEN_BODY_2(z, n, max_n) \
+    static generator::cpu_symbolic_scalar< BOOST_PP_ADD(n, max_n) , T##n > sym_a##n ;
+#define BOOST_ODEINT_GEN_BODY_3(z, n, unused) \
+    BOOST_PP_IF(n, +, BOOST_PP_EMPTY()) \
+    sym_a##n * BOOST_PP_CAT(sym_v, BOOST_PP_INC(n))
+BOOST_ODEINT_GEN_SCALE_SUM_OUTER((BOOST_ODEINT_GEN_BODY, ~))
+#undef BOOST_ODEINT_GEN_BODY
+#undef BOOST_ODEINT_GEN_BODY_1
+#undef BOOST_ODEINT_GEN_BODY_2
+#undef BOOST_ODEINT_GEN_BODY_3
 
 };
 #else
